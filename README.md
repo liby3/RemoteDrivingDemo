@@ -1,6 +1,8 @@
 # RemoteDrivingDemo
 基于mjpg-streamer的远程驾驶简单demo
 
+![image](https://github.com/liby3/RemoteDrivingDemo/blob/master/structure.PNG)
+
 ##1.Introduction
 在小车上搭建了两个服务器，一个是使用mjpg­streamer采集摄像头视频，建立的网页服务器，使用了8080端口；另一个是在小车上接收网页返回的post请求，提取post中的内容，并根据内容向底层arduino下达指令；
 
