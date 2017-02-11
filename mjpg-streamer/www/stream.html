@@ -1,0 +1,185 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <title>SYSU</title>
+    <meta http-equiv="content-type" content="text/html; charset=iso-8859-1" />
+    <link rel="stylesheet" href="style.css" type="text/css" />
+    <script type="text/javascript" src="jquery.js"></script>    
+    <script type="text/javascript" src="jquery.rotate.js"></script>
+    <script type="text/javascript">
+    
+    function $(s) {
+      return document.getElementById(s)?document.getElementById(s):s;
+    }
+
+    //按下键盘触发，POST请求
+    function keydown(e) {
+    var currKey = 0, e = e||event;   
+    currKey = e.keyCode||e.which||e.charCode;
+    var xml = new XMLHttpRequest();
+    xml.open('POST', 'http://113.228.22.24:6667', true);
+    xml.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+    if ((currKey > 36 && currKey < 41)) {
+      switch (currKey)
+      {
+        case 37:
+          keyName = "left";   
+          xml.send('command=left');
+          break;
+        case 38:
+          keyName = "up";   
+          xml.send('command=ahead');
+          break;
+        case 39:
+          keyName = "right";
+          xml.send('command=right');
+          break;
+        case 40:
+          keyName = "down";   
+          xml.send('command=back');
+          break;
+      }
+      alert("Send Commmand");
+    }
+
+    //抬起键盘出发，STOP命令
+    function keyup(e) {
+      var currKey = 0, e = e||event;   
+      currKey = e.keyCode||e.which||e.charCode;
+      if ((currKey > 36 && currKey < 41)) {
+        switch (currKey)
+        {
+          case 37:keyName = "left";   break;
+          case 38:keyName = "up";   break;
+          case 39:keyName = "right";   break;
+          case 40:keyName = "down";   break;
+        }
+        var xml = new XMLHttpRequest();
+        xml.open('POST', 'http://113.228.22.24:6667', true);
+        xml.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+        xml.send('command=stop');
+      }
+    }
+    document.onkeydown = keydown;
+    document.onkeyup = keyup;
+    
+
+    //用来进行摄像头角度变化的变量
+    var phi = 0, flipped = 0, mirrored = 0;
+    //网页按钮控制前进
+    function setAheadCommand() {
+    	var xml = new XMLHttpRequest();
+    	//xml.open('POST', 'http://192.168.1.106:8000', true);
+      xml.open('POST', 'http://113.228.22.24:6667', true);
+    	xml.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+    	xml.send('command=ahead'); 
+    	//alert("Ahead");
+    }
+    //网页按钮控制左转
+    function setLeftCommand() {
+    	var xml = new XMLHttpRequest();
+    	//xml.open('POST', 'http://192.168.1.106:8000', true);
+      xml.open('POST', 'http://113.228.22.24:6667', true);
+    	xml.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+    	xml.send('command=left'); 
+    	//alert("Left");
+    }
+    //网页按钮控制右转
+    function setRightCommand() {
+    	var xml = new XMLHttpRequest();
+    	//xml.open('POST', 'http://192.168.1.106:8000', true);
+      xml.open('POST', 'http://113.228.22.24:6667', true);
+    	xml.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+    	xml.send('command=right'); 
+    	//alert("Right");
+    }
+    //网页按钮控制停车
+    function setStopCommand() {
+    	var xml = new XMLHttpRequest();
+    	//xml.open('POST', 'http://192.168.1.106:8000', true);
+      xml.open('POST', 'http://113.228.22.24:6667', true);
+    	xml.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+    	xml.send('command=stop'); 
+    	//alert("Stop");
+    }
+
+	  function setXformClass () {
+		  $('.xform').each(function(idx,el) {
+			el.className = "xform x" +(flipped ? "-flipped":"") + (mirrored ? "-mirrored" : "") + "-rotated-" + phi;});
+	  }
+    $(document).ready(function() {
+		// set rotation angle phi and toggle rotate class
+		$('#rotate').click(function() {
+			phi = (phi + 90) % 360;
+			setXformClass();
+			if (phi % 180) {
+				$('.xform-p').addClass('rotated');
+			} else {
+				$('.xform-p').removeClass('rotated');
+			}
+		});
+		// toggle mirror class component
+		$('#mirror').click(function() {
+			mirrored = ! mirrored;
+			setXformClass();
+		});
+		// toggle flip class component
+		$('#flip').click(function() {
+			flipped = ! flipped;
+			setXformClass();
+		});
+	});
+	</script>
+  </head>
+
+  <body>
+    <div id="sidebar">
+      <h1>MJPG-Streamer Demo Pages</h1>
+      <h2>a ressource friendly streaming application</h2>
+
+      <div id="menu">
+        <a href="index.html">Home</a>
+        <a href="static.html">Stream</a> 
+        <a class="active" href="stream.html">Stream</a> 
+        <a href="java.html">Java</a> 
+        <a href="javascript.html">Javascript</a>
+        <a href="videolan.html">VideoLAN</a>
+        <a target="_blank" onClick="window.open(this.href, '_blank','width=400,height=400'); return false;" href="control.htm">Control</a>
+      </div>
+
+      <h3>Version info:</h3>
+      <p>v0.1 (Okt 22, 2007)</p>
+    </div>
+
+    <div id="content">
+      <h1>Stream</h1>
+      <h2>Display the stream</h2>
+
+      <h3>Hints</h3>
+      <p>This example shows a stream. It works with a few browsers like Firefox for example. To see a simple example click <a href="stream_simple.html">here</a>. You may have to reload this page by pressing F5 one or more times.</p>
+
+      <h3>Source snippet</h3>
+      <p><pre>&lt;img src="/?action=stream" /&gt;</pre></p>
+	<!-- 控制小车行驶按钮部分 -->
+	<p id="control">
+		<button id="controlLeft" onclick="setLeftCommand()"><div class="btnface"></div></button>
+		<button id="controlAhead" onclick="setAheadCommand()"><div class="btnface"></div></button>
+		<button id="controlRight" onclick="setRightCommand()"><div class="btnface"></div></button>
+		<button id="controlStop" onclick="setStopCommand()"><div class="btnface"></div></button>
+	</p>
+	<!-- 控制摄像头方向按钮部分 -->
+	<p id="xform">
+		<button id="rotate"><div class="btnface"></div></button>
+		<button id="mirror"><div class="btnface"></div></button>
+		<button id="flip"><div class="btnface"></div></button>
+	</p>
+	<!-- 摄像头采集画面 -->
+	<p class="xform-p"></p>
+	<p id="streamwrap" class="xform-p">
+		<img id="streamimage" class="xform" src="/?action=stream" />
+	</p>
+
+	<p>&copy; The <a href="http://mjpg-streamer.sf.net">MJPG-streamer team</a> | Design by <a href="http://andreasviklund.com">Andreas Viklund</a></p>
+  </body>
+</html>

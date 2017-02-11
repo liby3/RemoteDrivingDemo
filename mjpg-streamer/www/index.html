@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <title>中山大学智能车远程控制系统</title>
+   
+    <meta http-equiv="content-type" content="text/html" charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="style.css" type="text/css" /> 
+    <script type="text/javascript" src="jquery.js"></script>    
+    <script type="text/javascript" src="jquery.rotate.js"></script>
+    
+    <script>
+    //用来进行摄像头角度变化的变量，貌似有点儿问题，还没能debug
+    var phi = 0, flipped = 0, mirrored = 0;
+    function setXformClass () {
+      $('.camera-instruction.xform').each(function(idx,el) {
+      el.className = "xform x" +(flipped ? "-flipped":"") + (mirrored ? "-mirrored" : "") + "-rotated-" + phi;});
+    }
+    $(document).ready(function() {
+    // set rotation angle phi and toggle rotate class
+    $('#rotate').click(function() {
+      phi = (phi + 90) % 360;
+      setXformClass();
+      if (phi % 180) {
+        $('.xform-p').addClass('rotated');
+      } else {
+        $('.xform-p').removeClass('rotated');
+      }
+    });
+    // toggle mirror class component
+    $('#mirror').click(function() {
+      mirrored = ! mirrored;
+      setXformClass();
+    });
+    // toggle flip class component
+    $('#flip').click(function() {
+      flipped = ! flipped;
+      setXformClass();
+    });
+  });
+  </script>
+  
+  </head>
+
+  <script type="text/JavaScript">
+  //用来网页监听键盘事件
+    //counter是用于长摁的情况，用户长摁某个键，为了防止过度发送post请求，我们认为检测到联系摁2次以上相同的摁键视为长摁，不予发送新的post请求
+    var counter = 0; 
+    function $(s) {
+      return document.getElementById(s)?document.getElementById(s):s;
+    }
+
+    function keypress(e) {   
+    }
+
+    //按下键盘触发，发送POST请求至:8000服务器
+    function keydown(e) {
+    var currKey = 0, e = e||event;   
+    currKey = e.keyCode||e.which||e.charCode;  
+    if ((currKey > 36 && currKey < 41)) {
+      var xml = new XMLHttpRequest();
+      //服务器地址，一定是外网IP和路由器上面映射的端口，家里的路由器经常换IP，所以这里也需要经常改……
+      xml.open('POST', 'http://60.17.214.165:6667', true);
+      xml.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+      switch (currKey)
+      {
+        case 37:
+          keyName = "left";
+          counter++;
+          //小功能，网页上面的摁键提示图片也会相应变化
+          controlLeft.src = "left.png";
+          controlStop.src = "stop_up.png";
+          break;
+        case 38:
+          keyName = "ahead";
+          controlAhead.src = "ahead.png";
+          controlStop.src = "stop_up.png";
+          counter++; 
+          break;
+        case 39:
+          keyName = "right";
+          controlRight.src = "right.png";
+          controlStop.src = "stop_up.png";
+          counter++;
+          break;
+        case 40:
+          keyName = "down";
+          counter++;  
+          break;
+      }
+      if (counter < 2) {
+        command = 'command='+keyName;
+        xml.send(command);
+      }
+    }
+  }
+
+    //抬起键盘出发，发出STOP命令至:8000服务器
+    function keyup(e) {
+      var currKey = 0, e = e||event;   
+      currKey = e.keyCode||e.which||e.charCode;
+      if ((currKey > 36 && currKey < 41)) {
+        switch (currKey)
+        {
+          case 37:
+            keyName = "left";
+            controlStop.src = "stop.png";
+            controlLeft.src = "left_up.png"; 
+            break;
+          case 38:
+            keyName = "ahead";
+            controlStop.src = "stop.png";
+            controlAhead.src = "ahead_up.png";
+            break;
+          case 39:
+            keyName = "right"; 
+            controlStop.src = "stop.png";
+            controlRight.src = "right_up.png";
+            break;
+          case 40:
+            keyName = "down";   
+            break;
+        }
+        var xml = new XMLHttpRequest();
+        xml.open('POST', 'http://60.17.214.165:6667', true);
+        xml.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+        xml.send('command=stop');
+        counter = 0;
+      }
+    }
+    document.onkeydown = keydown;
+    document.onkeyup = keyup;
+    document.onkeypress = keypress;
+  </script>
+
+  <!-- 页面布局 -->
+<body>
+  <div id="sidebar">
+    <img src="logo.png" width="550" height="114" background="#43805f"/>
+      <h1>中山大学智能车远程驾驶系统</h1>
+      <h2>一个基于MJPG-Streamer与Raspberry的远程驾驶系统</h2>
+      <h3>Version info:</h3>
+      <p>V0.1 (July 21, 2016)</p>
+  </div>
+
+  <div id="camera-video">
+      <h1>摄像头采集画面：</h1>
+      <p class="xform-p"></p>
+      <p id="streamwrap" class="xform-p">
+      <img id="streamimage" class="xform" src="/?action=stream" />
+  </p>
+  </div>
+
+  <div id="control-instruction">
+      <h1>请按下方向键控制：左转、右转、前进，松开按键停止。</h1>
+      <p id="control">
+        <img id="controlLeft" with="30" height="30" src="left_up.png"/>
+        <img id="controlAhead" with="30" height="30" src="ahead_up.png"/>
+        <img id="controlRight" with="30" height="30" src="right_up.png"/>
+        <img id="controlStop" with="30" height="30" src="stop_up.png"/>
+  </p>
+  </div>
+
+  <div id="camera-instruction">
+      <h1>摄像头旋转按钮：</h1>
+      <p id="xform">
+        <button id="rotate"><div class="btnface"></div></button>
+        <button id="mirror"><div class="btnface"></div></button>
+        <button id="flip"><div class="btnface"></div></button>
+      </p>
+  </div>
+  </body>
+</html>

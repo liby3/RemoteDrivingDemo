@@ -1,0 +1,185 @@
+/* andreas07 - an open source xhtml/css website layout by Andreas Viklund - http://andreasviklund.com . Free to use for any purpose as long as the proper credits are given for the original design work.
+
+Version: 1.1, November 28, 2005 */
+
+/**************** Page and tag styles ****************/
+
+body
+{margin:0; padding:0; color:#303030; background:#ffffff; font:80% Verdana,Tahoma,sans-serif;overflow: scroll}
+
+img
+{float:left;margin:5; padding:5; background:#ffffff;}
+
+
+/**************** Sidebar area styles ****************/
+
+#sidebar
+{position:relative;top:0; left:0; width:100%; height:150px; overflow:auto; background:#43805f top right repeat-y; text-align:right;}
+
+body > #sidebar
+{position:fixed;}
+
+#sidebar h1
+{margin:20px 18px 0 5px; color:#ffffff; font-size:1.6em; letter-spacing:-2px; text-align:right;}
+
+#sidebar h2, #sidebar h3
+{margin:0 20px 18px 5px; color:#ffffff; font-size:1.1em; font-weight:bold; letter-spacing:-1px; text-align:right;}
+
+#sidebar h3
+{margin:20px 18px 4px 5px; color:#ffffff;}
+
+#sidebar  p
+{margin:20px 18px 5px; color:#ffffff; font-size:0.8em;}
+
+#camera-video
+{position:relateve;top:150px;background-color:#ffffff;height:470px; width:600px; float:right;overflow:auto;}
+
+body > #camera-video
+{position:fixed;}
+
+#camera-video h1
+{margin:10px 10px 10px 10px; color:#000000; font-size:1.6em; text-align:left;}
+
+#camera-instruction
+{position:relateve;top:200px;left:900px;background-color:#ffffff;height:100px; width:200px; float:right;overflow:auto;}
+
+body > #camera-instruction
+{position:fixed;}
+
+#camera-instruction h1
+{margin:10px 10px 10px 10px; color:#000000; font-size:1.6em; text-align:center;}
+
+#control-instruction
+{position:relateve;top:350px;left:900px;background-color:#ffffff; height:200px; width:200px; float:right;overflow:auto;}
+
+body > #control-instruction
+{position:fixed;}
+
+#control-instruction h1
+{margin:10px 10px 10px 10px; color:#000000; font-size:1.5em; text-align:center;}
+/**************** Content area styles ****************/
+
+#streamimage {
+width:520px; height: 390px;
+}
+
+#control {
+	margin:5px;
+	padding-left: 25px;
+}
+
+#xform {
+	margin:0;
+	padding-left: 10px;
+}
+#streamwrap {
+	height:350px
+}
+#streamwrap.rotated {
+	height:450px
+}
+p.xform-p {
+	height:5px;
+	margin-bottom:0 !important;
+}
+p.xform-p.rotated {
+	height:50px;
+	margin-bottom:20px !important;
+}
+
+/*
+	CSS3 transformations: rotate, flip, mirror
+*/
+
+img.x-rotated-0 {}
+img.x-rotated-90 {
+	-moz-transform: rotate(90deg);
+	-webkit-transform: rotate(90deg);
+}
+img.x-rotated-180 {
+	-moz-transform: rotate(180deg);
+	-webkit-transform: rotate(180deg);
+}
+img.x-rotated-270 {
+	-moz-transform: rotate(270deg);
+	-webkit-transform: rotate(270deg);
+}
+img.x-mirrored-rotated-0 {
+	-moz-transform: scaleX(-1);
+	-webkit-transform: scaleX(-1);
+}
+img.x-mirrored-rotated-90 {
+	-moz-transform: rotate(90deg) scaleX(-1);
+	-webkit-transform: rotate(90deg) scaleX(-1);
+}
+img.x-mirrored-rotated-180 {
+	-moz-transform: rotate(180deg) scaleX(-1);
+	-webkit-transform: rotate(180deg) scaleX(-1);
+}
+img.x-mirrored-rotated-270 {
+	-moz-transform: rotate(270deg) scaleX(-1);
+	-webkit-transform: rotate(270deg) scaleX(-1);
+}
+img.x-flipped-rotated-0 {
+	-moz-transform: scaleY(-1);
+	-webkit-transform: scaleY(-1);
+}
+img.x-flipped-rotated-90 {
+	-moz-transform: rotate(90deg) scaleY(-1);
+	-webkit-transform: rotate(90deg) scaleY(-1);
+}
+img.x-flipped-rotated-180 {
+	-moz-transform: rotate(180deg) scaleY(-1);
+	-webkit-transform: rotate(180deg) scaleY(-1);
+}
+img.x-flipped-rotated-270 {
+	-moz-transform: rotate(270deg) scaleY(-1);
+	-webkit-transform: rotate(270deg) scaleY(-1);
+}
+img.x-flipped-mirrored-rotated-0 {
+	-moz-transform: scale(-1,-1);
+	-webkit-transform: scale(-1,-1);
+}
+img.x-flipped-mirrored-rotated-90 {
+	-moz-transform: rotate(90deg) scale(-1,-1);
+	-webkit-transform: rotate(90deg) scale(-1,-1);
+}
+img.x-flipped-mirrored-rotated-180 {
+	-moz-transform: rotate(180deg) scale(-1,-1);
+	-webkit-transform: rotate(180deg) scale(-1,-1);
+}
+img.x-flipped-mirrored-rotated-270 {
+	-moz-transform: rotate(270deg) scale(-1,-1);
+	-webkit-transform: rotate(270deg) scale(-1,-1);
+}
+.btnface {
+	height:30px;
+	width:30px;
+}
+#rotate .btnface {
+	background:url("rotateicons.png") no-repeat scroll 7px 50% transparent;
+}
+#flip .btnface {
+	background:url("rotateicons.png") no-repeat scroll -65px 50% transparent;
+}
+#mirror .btnface {
+	background:url("rotateicons.png") no-repeat scroll -30px 50% transparent;
+}
+#controlLeft .btnface {
+	background:url("left.png") no-repeat scroll -15px 50% transparent;
+}
+#controlStop .btnface {
+	background:url("stop.png") no-repeat scroll 0px 50% transparent;
+}
+#controlRight .btnface {
+	background:url("right.png") no-repeat scroll 0px 50% transparent;
+}
+#controlAhead .btnface {
+	background:url("ahead.png") no-repeat scroll 2px 10% transparent;
+}
+/* averages */
+
+#fN {
+	position: relative;
+	top: 5px;
+}
